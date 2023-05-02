@@ -14,8 +14,6 @@ This is a simple project that implements a keystroke capturer in C++. The projec
 3. The program will capture keystrokes and display them on the console.
 4. The pressed keys will be recorded in the log file "log.txt" located in "C:\".
 
-**Important**: The use of this program to capture keystrokes may have security and privacy implications. Use it responsibly and in compliance with applicable laws and regulations.
-
 ## Version for Linux
 
 ### Requirements
@@ -30,8 +28,6 @@ This is a simple project that implements a keystroke capturer in C++. The projec
 5. Run the resulting program with appropriate permissions (e.g., as root) to access the keyboard device and write to the log file.
 6. The program will capture keystrokes and display them on the console.
 7. Keystrokes will be recorded in the specified log file.
-
-**Important**: The use of this program to capture keystrokes may have security and privacy implications. Use it responsibly and in compliance with applicable laws and regulations.
 
 ## Version for macOS
 
@@ -48,7 +44,20 @@ This is a simple project that implements a keystroke capturer in C++. The projec
 6. The program will capture keystrokes and display them on the console.
 7. Keystrokes will be recorded in the specified log file.
 
-**Important**: The use of this program to capture keystrokes may have security and privacy implications. Use it responsibly and in compliance with applicable laws and regulations.
+## Version with Socket Communication
+
+### Requirements
+- Windows, Linux, or macOS
+- C++ compiler
+
+### Instructions for Use
+1. Open the source code file "keylogger_socket.cpp" in a text editor.
+2. Follow the instructions specific to your operating system mentioned in the respective sections above to adjust the code for the keyboard device and log file.
+3. Compile the source code using the C++ compiler.
+4. Run the resulting program.
+5. The program will capture keystrokes and display them on the console.
+6. Keystrokes will be recorded in the specified log file.
+7. Additionally, the keystrokes will be sent to a socket server with the IP address and port specified in the code.
 
 ## Disclaimer
 
