@@ -1,6 +1,6 @@
 # Keylogger - Keystroke Capture
 
-This is a simple project that implements a keystroke capturer in C++. The project has versions for Windows, Linux, and macOS systems.
+This is a project that implements a keystroke capturer in C++. The project has versions for Windows, Linux, and macOS systems.
 
 ## Version for Windows
 
